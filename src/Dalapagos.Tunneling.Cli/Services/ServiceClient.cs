@@ -4,9 +4,11 @@ using System.Net.Http.Headers;
 using Helpers;
 using Refit;
 
-public class ServiceClient()
+internal static class ServiceClient
 {
-   private const string BaseUrl = "https://dalapagos-tunneling.salmonstone-ca93e2e0.westus3.azurecontainerapps.io";
+    private const string BaseUrl = "https://dalapagos-tunneling.salmonstone-ca93e2e0.westus3.azurecontainerapps.io";
+
+    public static string? OrganizationId { get; set; }
 
     public static IOrganizationService Organizations 
     { 
@@ -14,6 +16,15 @@ public class ServiceClient()
         {
             var httpClient = CreateHttpClient(BaseUrl, AuthenticationHelper.AccessToken);
             return RestService.For<IOrganizationService>(httpClient);
+        } 
+    }
+
+    public static IHubService Hubs 
+    { 
+        get
+        {
+            var httpClient = CreateHttpClient(BaseUrl, AuthenticationHelper.AccessToken);
+            return RestService.For<IHubService>(httpClient);
         } 
     }
 

@@ -3,7 +3,10 @@ namespace Dalapagos.Tunneling.Cli.Commands;
 using McMaster.Extensions.CommandLineUtils;
 
 [Command(Description = "Dalapagos Tunneling Commands")]
+[Subcommand(typeof(GetOrgCommand))]
 [Subcommand(typeof(GetOrgsCommand))]
+[Subcommand(typeof(SetOrgCommand))]
+[Subcommand(typeof(GetHubsCommand))]
 internal class AppCommand
 {
     private static readonly string[] quit = ["exit", "quit", "q"];

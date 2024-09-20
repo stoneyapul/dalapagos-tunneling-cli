@@ -1,19 +1,24 @@
 namespace Dalapagos.Tunneling.Cli.Commands;
 
-using System.Text.Json;
 using Helpers;
 using McMaster.Extensions.CommandLineUtils;
 using Services;
 
-[Command(Description = "Get a list of organizations.")]
-internal class GetOrgsCommand : CommandBase
+[Command(Description = "Get the default organization.")]
+internal class GetOrgCommand : CommandBase
 {
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
     {
         try
         {
             await EnsureAuthenticatedAsync(console, cancellationToken);
-            
+
+            if (!string.IsNullOrWhiteSpace(ServiceClient.OrganizationId))
+            {
+                ConsoleHelper.WriteInfo(console, ServiceClient.OrganizationId);
+                return 0;
+            }
+
             ConsoleHelper.WriteInfo(console, "Getting organizations...");
             Console.WriteLine();
 
@@ -30,13 +35,9 @@ internal class GetOrgsCommand : CommandBase
                 ConsoleHelper.WriteError(console, "No organizations found.");
                 return 1;
             }
-           
-            var output = JsonSerializer.Serialize(organizations, JsonIndented);
 
-            Console.WriteLine(output);
-            Console.WriteLine();
-
-            UseOrganization(console, organizations[0].OrganizationId.ToString());
+            ServiceClient.OrganizationId = organizations[0].OrganizationId.ToString();
+            ConsoleHelper.WriteInfo(console, ServiceClient.OrganizationId);
   
             return 0;
         }

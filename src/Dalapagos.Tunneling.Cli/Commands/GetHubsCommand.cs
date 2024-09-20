@@ -5,39 +5,46 @@ using Helpers;
 using McMaster.Extensions.CommandLineUtils;
 using Services;
 
-[Command(Description = "Get a list of organizations.")]
-internal class GetOrgsCommand : CommandBase
+[Command(Description = "Get a list of hubs.")]
+internal class GetHubsCommand: CommandBase
 {
+    [Argument(0, Description = "An optional organization id.")]
+    public string? OrganizationId { get; set; }
+
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(OrganizationId))
+            {
+                OrganizationId = ServiceClient.OrganizationId;
+            }
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(OrganizationId, "OrganizationId");
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
-            ConsoleHelper.WriteInfo(console, "Getting organizations...");
+            ConsoleHelper.WriteInfo(console, "Getting hubs...");
             Console.WriteLine();
 
             var retryPipeline = GetRetryPipeline();
             var response = await retryPipeline.ExecuteAsync(
-                async (ct) => await ServiceClient.Organizations.GetOrganizationsByUserIdAsync(ct),
+                async (ct) => await ServiceClient.Hubs.GetHubsByOrganizationIdAsync(OrganizationId, ct),
                 cancellationToken);
 
             EnsureSuccess(console, response);
 
-            var organizations = response.Organizations;
-            if (organizations == null || organizations.Length == 0)
+            var hubs = response.Hubs;
+            if (hubs == null || hubs.Length == 0)
             {
-                ConsoleHelper.WriteError(console, "No organizations found.");
+                ConsoleHelper.WriteInfo(console, "No hubs found.");
                 return 1;
             }
            
-            var output = JsonSerializer.Serialize(organizations, JsonIndented);
+            var output = JsonSerializer.Serialize(hubs, JsonIndented);
 
             Console.WriteLine(output);
             Console.WriteLine();
 
-            UseOrganization(console, organizations[0].OrganizationId.ToString());
-  
             return 0;
         }
         catch (Exception e)
