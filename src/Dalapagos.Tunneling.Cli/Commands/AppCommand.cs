@@ -6,7 +6,10 @@ using McMaster.Extensions.CommandLineUtils;
 [Subcommand(typeof(GetOrgCommand))]
 [Subcommand(typeof(GetOrgsCommand))]
 [Subcommand(typeof(SetOrgCommand))]
+[Subcommand(typeof(GetHubCommand))]
 [Subcommand(typeof(GetHubsCommand))]
+[Subcommand(typeof(AddHubCommand))]
+[Subcommand(typeof(RemoveHubCommand))]
 internal class AppCommand
 {
     private static readonly string[] quit = ["exit", "quit", "q"];
@@ -17,7 +20,7 @@ internal class AppCommand
         app.ShowHelp();
         while (true)
         {
-            var command = Prompt.GetString("Enter command prompt:", promptColor: ConsoleColor.Blue);
+            var command = Prompt.GetString("Enter command:", promptColor: ConsoleColor.Blue);
 
             if (quit.Contains(command))
             {

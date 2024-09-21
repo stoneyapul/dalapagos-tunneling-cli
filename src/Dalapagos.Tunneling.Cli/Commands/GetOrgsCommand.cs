@@ -6,7 +6,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Services;
 
 [Command(Description = "Get a list of organizations.")]
-internal class GetOrgsCommand : CommandBase
+internal sealed class GetOrgsCommand : CommandBase
 {
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
     {

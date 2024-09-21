@@ -5,7 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Services;
 
 [Command(Description = "Get the default organization.")]
-internal class GetOrgCommand : CommandBase
+internal sealed class GetOrgCommand : CommandBase
 {
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
     {

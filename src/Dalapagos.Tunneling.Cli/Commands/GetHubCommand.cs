@@ -6,8 +6,11 @@ using McMaster.Extensions.CommandLineUtils;
 using Services;
 
 [Command(Description = "Get a list of hubs.")]
-internal sealed class GetHubsCommand: CommandBase
+internal sealed class GetHubCommand : CommandBase
 {
+    [Argument(0, Description = "The hub id.")]
+    public required string HubId { get; set; }
+
     [Option(Description = "An optional organization id.")]
     public string? OrganizationId { get; set; }
 
@@ -23,24 +26,24 @@ internal sealed class GetHubsCommand: CommandBase
             ArgumentException.ThrowIfNullOrWhiteSpace(OrganizationId, "OrganizationId");
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
-            ConsoleHelper.WriteInfo(console, "Getting hubs...");
+            ConsoleHelper.WriteInfo(console, $"Getting hub {HubId}...");
             Console.WriteLine();
 
             var retryPipeline = GetRetryPipeline();
             var response = await retryPipeline.ExecuteAsync(
-                async (ct) => await ServiceClient.Hubs.GetHubsByOrganizationIdAsync(OrganizationId, ct),
+                async (ct) => await ServiceClient.Hubs.GetHubByIdAsync(OrganizationId, HubId, ct),
                 cancellationToken);
 
             EnsureSuccess(console, response);
 
-            var hubs = response.Hubs;
-            if (hubs == null || hubs.Length == 0)
+            var hub = response.Hub;
+            if (hub == null)
             {
-                ConsoleHelper.WriteInfo(console, "No hubs found.");
+                ConsoleHelper.WriteInfo(console, "Hub not found.");
                 return 1;
             }
            
-            var output = JsonSerializer.Serialize(hubs, JsonIndented);
+            var output = JsonSerializer.Serialize(hub, JsonIndented);
 
             Console.WriteLine(output);
             Console.WriteLine();

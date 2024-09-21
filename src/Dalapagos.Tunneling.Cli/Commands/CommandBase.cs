@@ -8,7 +8,7 @@ using Polly;
 using Polly.Retry;
 using Services;
 
-public abstract class CommandBase
+internal abstract class CommandBase
 {
     private const int RetryAttempts = 2;
 

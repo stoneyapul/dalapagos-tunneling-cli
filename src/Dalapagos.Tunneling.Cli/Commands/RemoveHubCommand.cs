@@ -1,17 +1,19 @@
 namespace Dalapagos.Tunneling.Cli.Commands;
 
-using System.Text.Json;
 using Helpers;
 using McMaster.Extensions.CommandLineUtils;
 using Services;
 
-[Command(Description = "Get a list of hubs.")]
-internal sealed class GetHubsCommand: CommandBase
+[Command(Description = "De-provision a hub.")]
+internal sealed class RemoveHubCommand : CommandBase
 {
+    [Argument(0, Description = "The hub id.")]
+    public required string HubId { get; set; }
+
     [Option(Description = "An optional organization id.")]
     public string? OrganizationId { get; set; }
 
-    public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
+   public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
     {
         try
         {
@@ -23,28 +25,17 @@ internal sealed class GetHubsCommand: CommandBase
             ArgumentException.ThrowIfNullOrWhiteSpace(OrganizationId, "OrganizationId");
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
-            ConsoleHelper.WriteInfo(console, "Getting hubs...");
+            ConsoleHelper.WriteInfo(console, $"De-provisioning hub {HubId}...");
             Console.WriteLine();
 
             var retryPipeline = GetRetryPipeline();
             var response = await retryPipeline.ExecuteAsync(
-                async (ct) => await ServiceClient.Hubs.GetHubsByOrganizationIdAsync(OrganizationId, ct),
+                async (ct) => await ServiceClient.Hubs.RemoveHubByIdAsync(OrganizationId, HubId, ct),
                 cancellationToken);
 
             EnsureSuccess(console, response);
 
-            var hubs = response.Hubs;
-            if (hubs == null || hubs.Length == 0)
-            {
-                ConsoleHelper.WriteInfo(console, "No hubs found.");
-                return 1;
-            }
-           
-            var output = JsonSerializer.Serialize(hubs, JsonIndented);
-
-            Console.WriteLine(output);
-            Console.WriteLine();
-
+            ConsoleHelper.WriteInfo(console, "Hub is de-provisioning. This takes a few minutes...");
             return 0;
         }
         catch (Exception e)

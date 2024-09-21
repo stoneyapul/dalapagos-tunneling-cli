@@ -4,7 +4,7 @@ using Helpers;
 using McMaster.Extensions.CommandLineUtils;
 
 [Command(Description = "Set the default organization.")]
-internal class SetOrgCommand : CommandBase
+internal sealed class SetOrgCommand : CommandBase
 {
     [Argument(0, Description = "The organization id.")]
     public required string OrganizationId { get; set; }
