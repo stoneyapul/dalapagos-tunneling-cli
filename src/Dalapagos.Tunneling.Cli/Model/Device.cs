@@ -15,7 +15,7 @@ public class Device
     public required string Name { get; set; }
 
     [JsonPropertyName("os")]
-    public required string Os { get; set; }
+    public Os Os { get; set; }
 
     [JsonPropertyName("pairingScript")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

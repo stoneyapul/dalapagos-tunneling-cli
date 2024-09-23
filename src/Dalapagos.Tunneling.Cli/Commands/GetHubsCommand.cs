@@ -8,7 +8,7 @@ using Services;
 [Command(Description = "Get a list of hubs.")]
 internal sealed class GetHubsCommand: CommandBase
 {
-    [Option(Description = "An optional organization id.")]
+    [Option(ShortName = "oid", Description = "An optional organization id.")]
     public string? OrganizationId { get; set; }
 
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)

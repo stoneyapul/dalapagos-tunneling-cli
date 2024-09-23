@@ -15,7 +15,7 @@ internal sealed class AddHubCommand : CommandBase
     [Argument(1, Description = "The hub location.")]
     public required ServerLocation Location { get; set; } = ServerLocation.West;
 
-    [Option(Description = "An optional organization id.")]
+    [Option(ShortName = "oid", Description = "An optional organization id.")]
     public string? OrganizationId { get; set; }
 
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)

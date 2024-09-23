@@ -6,16 +6,34 @@ using Microsoft.Identity.Client;
 
 internal static class AuthenticationHelper
 {
-    public static string? AccessToken { get; private set; }
-
     private const string tenantId = "13cfba4f-9203-4496-a424-b19fe4f06252";
     private const string clientId = "5d91e02e-552b-4968-aea4-d153fcd116a1";
     private const string scope = "api://dalapagos-tunneling-api/.default";
+
+    public static string? AccessToken { get; private set; }
+
+    public static string AccessTokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dlpgs_access_token");
+
+    public static async Task SaveAccessTokenAsync(string token)
+    {
+        await File.WriteAllTextAsync(AccessTokenPath, token);
+    }
+
+    public static async Task<string?> ReadAccessTokenAsync()
+    {
+        if (File.Exists(AccessTokenPath))
+        {
+            return await File.ReadAllTextAsync(AccessTokenPath);
+        }
+
+        return null;
+    }
 
     public static async Task<bool> EnsureAuthenticatedAsync(IConsole console, CancellationToken cancellationToken)
     {
         try
         {
+            AccessToken = await ReadAccessTokenAsync();
             if (AccessToken != null && CheckTokenExpirationIsValid(AccessToken))
             {
                 return true;
@@ -61,6 +79,8 @@ internal static class AuthenticationHelper
             }).ExecuteAsync();
 
             AccessToken = msalAuthenticationResult.AccessToken;
+            await SaveAccessTokenAsync(AccessToken);
+
             return true;
         }
         catch (Exception e)

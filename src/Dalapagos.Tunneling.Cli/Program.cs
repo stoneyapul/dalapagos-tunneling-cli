@@ -9,5 +9,6 @@ Console.CancelKeyPress += (s, e) =>
     e.Cancel = true;
 };
 
+//args = ["add-device", "Test device1"];
 await Host.CreateDefaultBuilder(args)
     .RunCommandLineApplicationAsync<AppCommand>(args, cts.Token);

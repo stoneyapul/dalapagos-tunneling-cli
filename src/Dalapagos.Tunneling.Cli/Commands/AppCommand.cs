@@ -9,31 +9,15 @@ using McMaster.Extensions.CommandLineUtils;
 [Subcommand(typeof(GetHubCommand))]
 [Subcommand(typeof(GetHubsCommand))]
 [Subcommand(typeof(AddHubCommand))]
-[Subcommand(typeof(RemoveHubCommand))]
+[Subcommand(typeof(DelHubCommand))]
+[Subcommand(typeof(AddDeviceCommand))]
 internal class AppCommand
 {
     private static readonly string[] quit = ["exit", "quit", "q"];
 
-    public async Task<int> OnExecuteAsync(IConsole console, CommandLineApplication app)
+    public int OnExecute(IConsole console, CommandLineApplication app, CancellationToken cancellationToken)
     {
-        console.WriteLine("You must specify a command");
         app.ShowHelp();
-        while (true)
-        {
-            var command = Prompt.GetString("Enter command:", promptColor: ConsoleColor.Blue);
-
-            if (quit.Contains(command))
-            {
-                break;
-            }
-
-            if (command != null)
-                await app.ExecuteAsync(command.Split(' '));
-            else
-                console.WriteLine("Please enter a valid command");
-        }
-
-        return 1;
+        return 0;
     }
-
 }

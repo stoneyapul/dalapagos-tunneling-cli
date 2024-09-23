@@ -28,6 +28,15 @@ internal static class ServiceClient
         } 
     }
 
+    public static IDeviceService Devices 
+    { 
+        get
+        {
+            var httpClient = CreateHttpClient(BaseUrl, AuthenticationHelper.AccessToken);
+            return RestService.For<IDeviceService>(httpClient);
+        } 
+    }
+
     private static HttpClient CreateHttpClient(string baseUrl, string? accessToken)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(accessToken, nameof(accessToken));

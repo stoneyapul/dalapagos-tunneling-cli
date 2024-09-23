@@ -5,12 +5,12 @@ using McMaster.Extensions.CommandLineUtils;
 using Services;
 
 [Command(Description = "De-provision a hub.")]
-internal sealed class RemoveHubCommand : CommandBase
+internal sealed class DelHubCommand : CommandBase
 {
     [Argument(0, Description = "The hub id.")]
     public required string HubId { get; set; }
 
-    [Option(Description = "An optional organization id.")]
+    [Option(ShortName = "oid", Description = "An optional organization id.")]
     public string? OrganizationId { get; set; }
 
    public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
