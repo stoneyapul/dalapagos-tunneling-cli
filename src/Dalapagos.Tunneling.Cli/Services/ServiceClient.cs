@@ -10,6 +10,23 @@ internal static class ServiceClient
 
     public static string? OrganizationId { get; set; }
 
+    public static string OrganizationIdPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dlpgs_org_id");
+
+    public static async Task SaveOrganizationIdAsync(string token)
+    {
+        await File.WriteAllTextAsync(OrganizationIdPath, token);
+    }
+
+    public static async Task<string?> ReadOrganizationIdAsync()
+    {
+        if (File.Exists(OrganizationIdPath))
+        {
+            return await File.ReadAllTextAsync(OrganizationIdPath);
+        }
+
+        return null;
+    }
+
     public static IOrganizationService Organizations 
     { 
         get

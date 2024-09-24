@@ -17,12 +17,7 @@ internal sealed class DelHubCommand : CommandBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(OrganizationId))
-            {
-                OrganizationId = ServiceClient.OrganizationId;
-            }
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(OrganizationId, "OrganizationId");
+            OrganizationId = await EnsureOrganizationIdAsync(console, OrganizationId);
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
             ConsoleHelper.WriteInfo(console, $"De-provisioning hub {HubId}...");

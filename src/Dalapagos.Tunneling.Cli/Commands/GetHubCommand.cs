@@ -18,12 +18,7 @@ internal sealed class GetHubCommand : CommandBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(OrganizationId))
-            {
-                OrganizationId = ServiceClient.OrganizationId;
-            }
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(OrganizationId, "OrganizationId");
+            OrganizationId = await EnsureOrganizationIdAsync(console, OrganizationId);
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
             ConsoleHelper.WriteInfo(console, $"Getting hub {HubId}...");

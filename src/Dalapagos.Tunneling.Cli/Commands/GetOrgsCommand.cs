@@ -35,9 +35,13 @@ internal sealed class GetOrgsCommand : CommandBase
 
             Console.WriteLine(output);
             Console.WriteLine();
-
-            UseOrganization(console, organizations[0].OrganizationId.ToString());
   
+            var organizationId = await ServiceClient.ReadOrganizationIdAsync();
+            if (string.IsNullOrWhiteSpace(organizationId))
+            {
+                await UseOrganizationAsync(console, organizations[0].OrganizationId.ToString());
+            }
+
             return 0;
         }
         catch (Exception e)

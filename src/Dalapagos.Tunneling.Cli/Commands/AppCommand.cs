@@ -13,9 +13,7 @@ using McMaster.Extensions.CommandLineUtils;
 [Subcommand(typeof(AddDeviceCommand))]
 internal class AppCommand
 {
-    private static readonly string[] quit = ["exit", "quit", "q"];
-
-    public int OnExecute(IConsole console, CommandLineApplication app, CancellationToken cancellationToken)
+        public int OnExecute(IConsole console, CommandLineApplication app)
     {
         app.ShowHelp();
         return 0;

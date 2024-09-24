@@ -38,10 +38,28 @@ internal abstract class CommandBase
         }
     }
 
-    protected virtual void UseOrganization(IConsole console, string organizationId)
+    protected virtual async Task<string> EnsureOrganizationIdAsync(IConsole console, string? organizationId)
+    {
+        if (string.IsNullOrWhiteSpace(organizationId))
+        {
+            organizationId = await ServiceClient.ReadOrganizationIdAsync();
+            if (!string.IsNullOrWhiteSpace(organizationId))
+            {
+                await UseOrganizationAsync(console, organizationId);
+                return organizationId;
+            }
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(organizationId, "OrganizationId");
+        }
+
+        return organizationId;
+    }
+
+    protected virtual async Task UseOrganizationAsync(IConsole console, string organizationId)
     {
         ConsoleHelper.WriteInfo(console, $"Using organization: {organizationId}");
         ServiceClient.OrganizationId = organizationId;
+        await ServiceClient.SaveOrganizationIdAsync(organizationId);
     }
 
     protected ResiliencePipeline GetRetryPipeline()

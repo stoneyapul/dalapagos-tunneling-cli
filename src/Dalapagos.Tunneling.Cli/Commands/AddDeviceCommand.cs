@@ -25,12 +25,7 @@ internal sealed class AddDeviceCommand : CommandBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(OrganizationId))
-            {
-                OrganizationId = ServiceClient.OrganizationId;
-            }
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(OrganizationId, "OrganizationId");
+            OrganizationId = await EnsureOrganizationIdAsync(console, OrganizationId);
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
             var request = new AddDeviceRequest

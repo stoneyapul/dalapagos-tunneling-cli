@@ -21,7 +21,7 @@ internal sealed class SetOrgCommand : CommandBase
                 return 1;
             }
 
-            UseOrganization(console, OrganizationId);
+            await UseOrganizationAsync(console, OrganizationId);
   
             return 0;
         }

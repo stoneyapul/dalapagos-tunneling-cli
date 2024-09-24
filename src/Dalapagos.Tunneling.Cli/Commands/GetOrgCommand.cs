@@ -19,7 +19,7 @@ internal sealed class GetOrgCommand : CommandBase
                 return 0;
             }
 
-            ConsoleHelper.WriteInfo(console, "Getting organizations...");
+            ConsoleHelper.WriteInfo(console, "Getting organization...");
             Console.WriteLine();
 
             var retryPipeline = GetRetryPipeline();
