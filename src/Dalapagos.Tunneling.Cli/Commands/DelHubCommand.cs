@@ -21,7 +21,6 @@ internal sealed class DelHubCommand : CommandBase
             await EnsureAuthenticatedAsync(console, cancellationToken);
             
             ConsoleHelper.WriteInfo(console, $"De-provisioning hub {HubId}...");
-            Console.WriteLine();
 
             var retryPipeline = GetRetryPipeline();
             var response = await retryPipeline.ExecuteAsync(

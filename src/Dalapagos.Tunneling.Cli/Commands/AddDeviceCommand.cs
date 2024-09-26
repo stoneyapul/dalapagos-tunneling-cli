@@ -40,7 +40,7 @@ internal sealed class AddDeviceCommand : CommandBase
 
             var retryPipeline = GetRetryPipeline();
             var response = await retryPipeline.ExecuteAsync(
-                async (ct) => await ServiceClient.Devices.AddSDeviceAsync(OrganizationId, request, ct),
+                async (ct) => await ServiceClient.Devices.AddDeviceAsync(OrganizationId, request, ct),
                 cancellationToken);
 
             EnsureSuccess(console, response);
@@ -53,6 +53,17 @@ internal sealed class AddDeviceCommand : CommandBase
             }
            
             var output = JsonSerializer.Serialize(device, JsonIndented);
+
+            Console.WriteLine(output);
+            Console.WriteLine();
+
+            if (!string.IsNullOrWhiteSpace(device.PairingScript))
+            {
+                ConsoleHelper.WriteInfo(console, "Device pairing script:");
+                Console.WriteLine(device.PairingScript);
+                Console.WriteLine();
+            }
+
             return 0;
         }
         catch (Exception e)

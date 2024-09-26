@@ -11,6 +11,8 @@ using McMaster.Extensions.CommandLineUtils;
 [Subcommand(typeof(AddHubCommand))]
 [Subcommand(typeof(DelHubCommand))]
 [Subcommand(typeof(AddDeviceCommand))]
+[Subcommand(typeof(DelDeviceCommand))]
+[Subcommand(typeof(GetDevicePairingScriptCommand))]
 internal class AppCommand
 {
         public int OnExecute(IConsole console, CommandLineApplication app)

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
 <PropertyGroup>
-    <AssemblyName>dlgps</AssemblyName>
+    <AssemblyName>dlpgs</AssemblyName>
 </PropertyGroup>
 
   <ItemGroup>

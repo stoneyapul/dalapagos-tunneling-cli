@@ -49,6 +49,10 @@ internal sealed class AddHubCommand : CommandBase
             }
            
             var output = JsonSerializer.Serialize(hub, JsonIndented);
+
+            Console.WriteLine(output);
+            Console.WriteLine();
+
             return 0;
         }
         catch (Exception e)
