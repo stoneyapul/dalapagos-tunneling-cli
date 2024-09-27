@@ -13,6 +13,7 @@ using McMaster.Extensions.CommandLineUtils;
 [Subcommand(typeof(AddDeviceCommand))]
 [Subcommand(typeof(DelDeviceCommand))]
 [Subcommand(typeof(GetDevicePairingScriptCommand))]
+[Subcommand(typeof(AddTunnelCommand))]
 internal class AppCommand
 {
         public int OnExecute(IConsole console, CommandLineApplication app)

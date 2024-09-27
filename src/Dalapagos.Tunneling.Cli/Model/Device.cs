@@ -14,8 +14,11 @@ public class Device
     [JsonPropertyName("name")]
     public required string Name { get; set; }
 
-    [JsonPropertyName("os")]
+    [JsonIgnore]
     public Os Os { get; set; }
+
+    [JsonPropertyName("os")]
+    public string OsString => Os.ToString();
 
     [JsonIgnore]
     public string? PairingScript { get; set; }

@@ -7,6 +7,7 @@ using Refit;
 internal static class ServiceClient
 {
     private const string BaseUrl = "https://dalapagos-tunneling.salmonstone-ca93e2e0.westus3.azurecontainerapps.io";
+    private const string IpBaseUrl = "https://ipapi.co";
 
     public static string? OrganizationId { get; set; }
 
@@ -54,15 +55,34 @@ internal static class ServiceClient
         } 
     }
 
-    private static HttpClient CreateHttpClient(string baseUrl, string? accessToken)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(accessToken, nameof(accessToken));
+    public static ITunnelService Tunnels 
+    { 
+        get
+        {
+            var httpClient = CreateHttpClient(BaseUrl, AuthenticationHelper.AccessToken);
+            return RestService.For<ITunnelService>(httpClient);
+        } 
+    }
 
+    public static IGetIp Ip 
+    { 
+        get
+        {
+            var httpClient = CreateHttpClient(IpBaseUrl);
+            return RestService.For<IGetIp>(httpClient);
+        } 
+    }
+
+    private static HttpClient CreateHttpClient(string baseUrl, string? accessToken = null)
+    {
         var refitSettings = new RefitSettings { ContentSerializer = new SystemTextJsonContentSerializer() };
         var httpClient = RestService.CreateHttpClient(baseUrl, refitSettings);
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
+        if (accessToken != null)
+        {
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+ 
         return httpClient;
     }
 }
