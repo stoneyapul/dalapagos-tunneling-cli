@@ -20,6 +20,9 @@ internal sealed class AddTunnelCommand : CommandBase
     [Option(Description = "An optional port.")]
     public ushort? Port { get; set; }
 
+    [Option(Description = "Delete tunnel after specified minutes.")]
+    public int? DeleteAfterMin { get; set; } = 60;
+
     public async Task<int> OnExecuteAsync(IConsole console, CancellationToken cancellationToken)
     {
         try
@@ -38,7 +41,7 @@ internal sealed class AddTunnelCommand : CommandBase
                 Protocol = Protocol.ToString(),
                 Port = Port,
                 AllowedIp = ip,
-                DeleteAfterMin = 60
+                DeleteAfterMin = DeleteAfterMin ?? 60
             };
 
             ConsoleHelper.WriteInfo(console, $"Creating tunnel to {DeviceId}...");
